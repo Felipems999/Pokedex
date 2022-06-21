@@ -3,6 +3,7 @@ package jersey_quickstart.pokedex.service;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -43,6 +44,23 @@ public class PokemonService {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
 		}
 
+	}
+
+	@PUT
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{num}")
+	public Response putPokemon(@PathParam("num") String num, Pokemon pokemon) {
+		Pokemon poke = pokemonRepository.get(Integer.parseInt(num));
+		if (poke == null)
+			return Response.status(Response.Status.NOT_FOUND).build();
+
+		try {
+			pokemon.setNum(num);
+			pokemonRepository.Edit(pokemon);
+			return Response.status(Response.Status.OK).entity(pokemon).build();
+		} catch (Exception ex) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+		}
 	}
 
 }
