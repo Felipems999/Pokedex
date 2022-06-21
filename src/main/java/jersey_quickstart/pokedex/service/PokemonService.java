@@ -1,6 +1,7 @@
 package jersey_quickstart.pokedex.service;
 
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
@@ -48,6 +49,7 @@ public class PokemonService {
 
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{num}")
 	public Response putPokemon(@PathParam("num") String num, Pokemon pokemon) {
 		Pokemon poke = pokemonRepository.get(Integer.parseInt(num));
@@ -62,5 +64,25 @@ public class PokemonService {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
 		}
 	}
+	
+	@DELETE
+    @Path("{num}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deletePokemon(@PathParam("num") String num)
+    {
+        Pokemon poke = pokemonRepository.get(Integer.parseInt(num));
+        if(poke == null)
+            return Response.status(Response.Status.NOT_FOUND).build();
+        
+        try{
+            pokemonRepository.delete(Integer.parseInt(num));
+            return Response.status(Response.Status.OK).build();
+        }
+        catch(Exception ex)
+        {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        } 
+    }
+}
 
 }
