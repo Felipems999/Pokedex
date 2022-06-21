@@ -1,5 +1,7 @@
 package jersey_quickstart.pokedex.service;
 
+import java.util.List;
+
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -19,8 +21,8 @@ public class PokemonService {
 	private PokemonRepository pokemonRepository = new PokemonRepository();
 
 	@GET
-	@Path("{num}")
 	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{num}")
 	public Pokemon getPokemon(@PathParam("num") String num) {
 		Pokemon pokemon = null;
 
@@ -32,6 +34,13 @@ public class PokemonService {
 		}
 
 		throw new WebApplicationException(404);
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/pokemons")
+	public List<Pokemon> getPokemons() {
+		return pokemonRepository.getAll();
 	}
 
 	@POST
@@ -64,25 +73,20 @@ public class PokemonService {
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
 		}
 	}
-	
-	@DELETE
-    @Path("{num}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deletePokemon(@PathParam("num") String num)
-    {
-        Pokemon poke = pokemonRepository.get(Integer.parseInt(num));
-        if(poke == null)
-            return Response.status(Response.Status.NOT_FOUND).build();
-        
-        try{
-            pokemonRepository.delete(Integer.parseInt(num));
-            return Response.status(Response.Status.OK).build();
-        }
-        catch(Exception ex)
-        {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
-        } 
-    }
-}
 
+	@DELETE
+	@Path("{num}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deletePokemon(@PathParam("num") String num) {
+		Pokemon poke = pokemonRepository.get(Integer.parseInt(num));
+		if (poke == null)
+			return Response.status(Response.Status.NOT_FOUND).build();
+
+		try {
+			pokemonRepository.delete(Integer.parseInt(num));
+			return Response.status(Response.Status.OK).build();
+		} catch (Exception ex) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+		}
+	}
 }
