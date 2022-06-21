@@ -38,7 +38,6 @@ public class PokemonService {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/pokemons")
 	public List<Pokemon> getPokemons() {
 		return pokemonRepository.getAll();
 	}
