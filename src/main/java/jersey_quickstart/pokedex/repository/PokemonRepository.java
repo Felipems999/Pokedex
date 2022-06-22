@@ -7,7 +7,7 @@ import java.util.List;
 import jersey_quickstart.pokedex.entity.Pokemon;
 
 public class PokemonRepository {
-	private final static HashMap<Integer, Pokemon> pokemons = new HashMap<>();
+	private HashMap<Integer, Pokemon> pokemons = new HashMap<>();
 
 	public List<Pokemon> getAll() {
 		return new ArrayList<Pokemon>(pokemons.values());
