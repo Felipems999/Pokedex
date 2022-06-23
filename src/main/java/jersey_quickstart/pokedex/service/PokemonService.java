@@ -23,11 +23,11 @@ public class PokemonService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public Pokemon getPokemon(@PathParam("id") String num) {
+	public Pokemon getPokemon(@PathParam("id") int id) {
 		Pokemon pokemon = null;
 
 		for (Pokemon poke : pokemonRepository.getAll()) {
-			if (poke.getNum().toLowerCase().equals(num.toLowerCase())) {
+			if (poke.getId() == id) {
 				pokemon = poke;
 				return pokemon;
 			}
@@ -59,13 +59,13 @@ public class PokemonService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public Response putPokemon(@PathParam("id") String num, Pokemon pokemon) {
-		Pokemon poke = pokemonRepository.get(Integer.parseInt(num));
+	public Response putPokemon(@PathParam("id") int id, Pokemon pokemon) {
+		Pokemon poke = pokemonRepository.get(id);
 		if (poke == null)
 			return Response.status(Response.Status.NOT_FOUND).build();
 
 		try {
-			pokemon.setNum(num);
+			pokemon.setId(id);
 			pokemonRepository.Edit(pokemon);
 			return Response.status(Response.Status.OK).entity(pokemon).build();
 		} catch (Exception ex) {

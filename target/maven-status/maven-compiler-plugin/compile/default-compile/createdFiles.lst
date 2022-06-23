@@ -1,5 +1,5 @@
 jersey_quickstart\pokedex\repository\PokemonRepository.class
-jersey_quickstart\pokedex\service\PokemonResource.class
 jersey_quickstart\pokedex\Main.class
 jersey_quickstart\pokedex\MyResource.class
+jersey_quickstart\pokedex\service\PokemonService.class
 jersey_quickstart\pokedex\entity\Pokemon.class
