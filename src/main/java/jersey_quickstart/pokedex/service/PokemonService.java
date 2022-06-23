@@ -1,5 +1,6 @@
 package jersey_quickstart.pokedex.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.ws.rs.Consumes;
@@ -22,9 +23,10 @@ public class PokemonService {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("{id}")
-	public Pokemon getPokemon(@PathParam("id") int id) {
+	@Path("{num}")
+	public Pokemon getPokemon(@PathParam("num") String num) {
 		Pokemon pokemon = null;
+		int id = Integer.parseInt(num);
 
 		for (Pokemon poke : pokemonRepository.getAll()) {
 			if (poke.getId() == id) {
@@ -34,6 +36,21 @@ public class PokemonService {
 		}
 
 		throw new WebApplicationException(404);
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{type}")
+	public List<Pokemon> getPokemonPorTipo(@PathParam("type") String type) {
+		List<Pokemon> listaTipo = new ArrayList<>();
+
+		for (Pokemon poke : pokemonRepository.getAll()) {
+			if (poke.getType().contains(type)) {
+				listaTipo.add(poke);
+			}
+		}
+
+		return listaTipo;
 	}
 
 	@GET
@@ -58,8 +75,10 @@ public class PokemonService {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{id}")
-	public Response putPokemon(@PathParam("id") int id, Pokemon pokemon) {
+	@Path("{num}")
+	public Response putPokemon(@PathParam("num") String num, Pokemon pokemon) {
+		int id = Integer.parseInt(num);
+
 		Pokemon poke = pokemonRepository.get(id);
 		if (poke == null)
 			return Response.status(Response.Status.NOT_FOUND).build();
@@ -74,9 +93,10 @@ public class PokemonService {
 	}
 
 	@DELETE
-	@Path("{id}")
+	@Path("{num}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response deletePokemon(@PathParam("id") int id) {
+	public Response deletePokemon(@PathParam("num") String num) {
+		int id = Integer.parseInt(num);
 		Pokemon poke = pokemonRepository.get(id);
 		if (poke == null)
 			return Response.status(Response.Status.NOT_FOUND).build();
